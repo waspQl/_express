@@ -2,7 +2,9 @@
   "name": "root",
   "scripts": {
     "lint": "eslint --ext .ts ./src",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "npx ts-node src/app.ts ${PORT:-3000} & run-p test:*; unset PORT && pgrep -f 'npx ts-node src/app.ts' | xargs kill -9",
+    "test:GET": "if curl -X GET http://localhost:${PORT:-3000} 2> /dev/null | grep -xs 'GET is sended.'; then echo 'GET is successed.'; else echo Error && exit 1; fi ",
+    "test:POST": "if curl -X POST http://localhost:${PORT:-3000} 2> /dev/null | grep -xs 'POST is sended.'; then echo 'POST is successed.'; else echo Error && exit 1; fi "
   },
   "dependencies": {
     "express": "4.17.1",
@@ -15,6 +17,7 @@
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.10.0",
     "eslint-plugin-prettier": "3.1.2",
+    "npm-run-all": "4.1.5",
     "prettier": "1.19.1",
     "ts-node": "8.6.2"
   }

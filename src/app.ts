@@ -2,12 +2,21 @@ import Express = require('express')
 
 const app = Express();
 
-app.listen(3000, function () {
+// 引数が渡ってきた場合はそれをport番号として使う
+let port = 3000
+if (
+  process.argv[2]
+  && Number.isInteger(
+    parseInt(process.argv[2])
+  )
+) port = parseInt(process.argv[2])
+
+app.listen(port, () => {
 });
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.send('GET is sended.');
 });
-app.post('/', function (req, res) {
+app.post('/', (req, res) => {
   res.send('POST is sended.');
 });
