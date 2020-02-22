@@ -2,9 +2,11 @@
   "name": "root",
   "scripts": {
     "lint": "eslint --ext .ts ./src",
-    "test": "npx ts-node src/app.ts ${PORT:-3000} & run-p test:*; unset PORT && pgrep -f 'npx ts-node src/app.ts' | xargs kill -9",
-    "test:GET": "if curl -X GET http://localhost:${PORT:-3000} 2> /dev/null | grep -xs 'GET is sended.'; then echo 'GET is successed.'; else echo Error && exit 1; fi ",
-    "test:POST": "if curl -X POST http://localhost:${PORT:-3000} 2> /dev/null | grep -xs 'POST is sended.'; then echo 'POST is successed.'; else echo Error && exit 1; fi "
+    "test": "run-p api test:* finish",
+    "api": "npx ts-node src/app.ts ${PORT:-3000}",
+    "test:GET": "sleep 5; if curl -X GET http://localhost:${PORT:-3000} 2> /dev/null | grep -xs 'GET is sended.'; then echo 'GET is successed.'; else echo 'GET is failed.' && exit 1; fi",
+    "test:POST": "sleep 5; if curl -X POST http://localhost:${PORT:-3000} 2> /dev/null | grep -xs 'POST is sended.'; then echo 'POST is successed.'; else echo 'POST is failed.' && exit 1; fi",
+    "finish": "sleep 10; unset PORT; pgrep -f 'npx ts-node src/app.ts' | xargs kill -9"
   },
   "dependencies": {
     "express": "4.17.1",
